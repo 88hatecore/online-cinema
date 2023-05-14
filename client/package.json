@@ -1,5 +1,10 @@
 {
   "name": "client",
+  "author": {
+    "email": "prhatecore@gmail.com",
+    "name": "Ilya Dolgov"
+  },
+  "description": "Cinema application",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -23,6 +28,8 @@
     "typescript": "5.0.4"
   },
   "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^4.1.1",
+    "prettier": "^2.8.8",
     "tailwindcss": "^3.3.2"
   }
 }
