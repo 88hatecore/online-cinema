@@ -2,7 +2,6 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "nestjs-typegoose";
 import { GenreModel } from "./genre.model";
 import { ModelType } from "@typegoose/typegoose/lib/types";
-import { genSalt, hash } from "bcryptjs";
 import { CreateGenreDto } from "./dto/createGenre.dto";
 
 @Injectable()
@@ -12,7 +11,9 @@ export class GenreService {
 	) {}
 
 	async bySlug(slug: string) {
-		return this.GenreModel.findOne({ slug }).exec();
+		const doc = await this.GenreModel.findOne({ slug }).exec();
+		if (!doc) throw new NotFoundException("Genre not found");
+		return doc;
 	}
 
 	async getAll(searchTerm?: string) {
@@ -74,14 +75,14 @@ export class GenreService {
 			new: true,
 		}).exec();
 		if (!updateDoc) throw new NotFoundException("Genre not found");
-		
-    return updateDoc;
+
+		return updateDoc;
 	}
 
 	async delete(id: string) {
 		const deleteDoc = await this.GenreModel.findByIdAndDelete(id).exec();
 		if (!deleteDoc) throw new NotFoundException("Genre not found");
-		
-    return deleteDoc;
+
+		return deleteDoc;
 	}
 }
