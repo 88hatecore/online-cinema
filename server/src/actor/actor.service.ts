@@ -7,11 +7,11 @@ import { ActorDto } from "./actor.dto";
 @Injectable()
 export class ActorService {
 	constructor(
-		@InjectModel(ActorModel) private readonly ActorModel: ModelType<ActorModel>
+		@InjectModel(ActorModel) private readonly actorModel: ModelType<ActorModel>
 	) {}
 
 	async bySlug(slug: string) {
-		const doc = await this.ActorModel.findOne({ slug }).exec();
+		const doc = await this.actorModel.findOne({ slug }).exec();
 		if (!doc) throw new NotFoundException("Actor not found");
 		return doc;
 	}
@@ -31,7 +31,8 @@ export class ActorService {
 				],
 			};
 
-		return this.ActorModel.find(options)
+		return this.actorModel
+			.find(options)
 			.select("-updatedAt -__v")
 			.sort({
 				createdAt: "desc",
@@ -41,14 +42,14 @@ export class ActorService {
 
 	// admin
 	async byId(_id: string) {
-		const actor = await this.ActorModel.findById(_id);
+		const actor = await this.actorModel.findById(_id);
 		if (!actor) throw new NotFoundException("Actor not found!");
 
 		return actor;
 	}
 
 	async getCount() {
-		return this.ActorModel.find().count().exec();
+		return this.actorModel.find().count().exec();
 	}
 
 	async create() {
@@ -57,21 +58,23 @@ export class ActorService {
 			slug: "",
 			photo: "",
 		};
-		const actor = await this.ActorModel.create(defaultValue);
+		const actor = await this.actorModel.create(defaultValue);
 		return actor._id;
 	}
 
 	async update(_id: string, dto: ActorDto) {
-		const updateDoc = await this.ActorModel.findByIdAndUpdate(_id, dto, {
-			new: true,
-		}).exec();
+		const updateDoc = await this.actorModel
+			.findByIdAndUpdate(_id, dto, {
+				new: true,
+			})
+			.exec();
 		if (!updateDoc) throw new NotFoundException("Actor not found");
 
 		return updateDoc;
 	}
 
 	async delete(id: string) {
-		const deleteDoc = await this.ActorModel.findByIdAndDelete(id).exec();
+		const deleteDoc = await this.actorModel.findByIdAndDelete(id).exec();
 		if (!deleteDoc) throw new NotFoundException("Actor not found");
 
 		return deleteDoc;

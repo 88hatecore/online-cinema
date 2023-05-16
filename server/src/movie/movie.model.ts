@@ -1,6 +1,5 @@
 import { Ref, prop } from "@typegoose/typegoose";
 import { Base, TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
-import { IsString } from "class-validator";
 import { ActorModel } from "src/actor/actor.model";
 import { GenreModel } from "src/genre/genre.model";
 
@@ -26,9 +25,6 @@ export class MovieModel extends TimeStamps {
 
 	@prop()
 	title: string;
-
-	@prop()
-	description: string;
 
 	@prop({ unique: true })
 	slug: string;
