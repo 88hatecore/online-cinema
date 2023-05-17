@@ -1,6 +1,6 @@
-import { TelegramOptions } from "src/telegram/telegram.interface";
+import { ITelegramOptions } from "src/telegram/telegram.interface";
 
-export const getTelegramConfig = (): TelegramOptions => ({
+export const getTelegramConfig = (): ITelegramOptions => ({
 	chatId: "",
 	token: "",
 });

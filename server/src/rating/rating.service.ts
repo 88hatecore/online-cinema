@@ -14,20 +14,10 @@ export class RatingService {
 		private readonly movieService: MovieService
 	) {}
 
-	async getMovieValueByUser(movie: Types.ObjectId, user: Types.ObjectId) {
-		return this.ratingModel
-			.findOne({ movie, user })
-			.select("value")
-			.exec()
-			.then((data) => (data ? data.value : 0));
-	}
-
-	async averageRatingByMovie(movieId: Types.ObjectId | string) {
+	async averageRatingbyMovie(movieId: Types.ObjectId | string) {
 		const ratingsMovie: RatingModel[] = await this.ratingModel
 			.aggregate()
-			.match({
-				movieId: new Types.ObjectId(movieId),
-			})
+			.match({ movieId: new Types.ObjectId(movieId) })
 			.exec();
 
 		return (
@@ -38,26 +28,31 @@ export class RatingService {
 
 	async setRating(userId: Types.ObjectId, dto: SetRatingDto) {
 		const { movieId, value } = dto;
+
 		const newRating = await this.ratingModel
 			.findOneAndUpdate(
 				{ movieId, userId },
 				{
-					movieId,
 					userId,
+					movieId,
 					value,
 				},
-				{
-					new: true,
-					upsert: true,
-					setDefaultsOnInsert: true,
-				}
+				{ upsert: true, new: true, setDefaultsOnInsert: true }
 			)
 			.exec();
 
-		const averageRating = await this.averageRatingByMovie(movieId);
+		const averageRating = await this.averageRatingbyMovie(movieId);
 
 		await this.movieService.updateRating(movieId, averageRating);
 
 		return newRating;
+	}
+
+	async getMovieValueByUser(movieId: Types.ObjectId, userId: Types.ObjectId) {
+		return this.ratingModel
+			.findOne({ movieId, userId })
+			.select("value")
+			.exec()
+			.then((data) => (data ? data.value : 0));
 	}
 }

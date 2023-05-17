@@ -4,6 +4,7 @@ import {
 	Delete,
 	Get,
 	HttpCode,
+	NotFoundException,
 	Param,
 	Post,
 	Put,
@@ -33,8 +34,8 @@ export class UserController {
 	@Put("profile")
 	@HttpCode(200)
 	@Auth()
-	async updateProfile(@User("_id") _id: string, @Body() dto: UpadateUserDto) {
-		return this.userService.updateProfile(_id, dto);
+	async updateProfile(@User("_id") _id: string, @Body() data: UpadateUserDto) {
+		return this.userService.updateProfile(_id, data);
 	}
 
 	@Get("profile/favorites")
@@ -77,15 +78,15 @@ export class UserController {
 	@Auth("admin")
 	async updateUser(
 		@Param("id", IdValidationPipe) id: string,
-		@Body() dto: UpadateUserDto
+		@Body() data: UpadateUserDto
 	) {
-		return this.userService.updateProfile(id, dto);
+		return this.userService.updateProfile(id, data);
 	}
 
 	@Delete(":id")
-	@HttpCode(200)
 	@Auth("admin")
-	async deleteUser(@Param("id", IdValidationPipe) id: string) {
-		return this.userService.delete(id);
+	async delete(@Param("id", IdValidationPipe) id: string) {
+		const deletedDoc = await this.userService.delete(id);
+		if (!deletedDoc) throw new NotFoundException("Movie not found");
 	}
 }
