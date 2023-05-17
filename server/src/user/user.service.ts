@@ -1,18 +1,19 @@
 import { ModelType } from "@typegoose/typegoose/lib/types";
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, NotFoundException, Type } from "@nestjs/common";
 import { InjectModel } from "nestjs-typegoose";
 import { UserModel } from "./user.model";
 import { UpadateUserDto } from "./dto/updateUser.dto";
 import { genSalt, hash } from "bcryptjs";
+import { Types } from "mongoose";
 
 @Injectable()
 export class UserService {
 	constructor(
-		@InjectModel(UserModel) private readonly UserModel: ModelType<UserModel>
+		@InjectModel(UserModel) private readonly userModel: ModelType<UserModel>
 	) {}
 
 	async byId(_id: string) {
-		const user = await this.UserModel.findById(_id);
+		const user = await this.userModel.findById(_id);
 		if (!user) throw new NotFoundException("User not found!");
 
 		return user;
@@ -20,7 +21,7 @@ export class UserService {
 
 	async updateProfile(_id: string, dto: UpadateUserDto) {
 		const user = await this.byId(_id);
-		const isSameUser = await this.UserModel.findOne({ email: dto.email });
+		const isSameUser = await this.userModel.findOne({ email: dto.email });
 
 		if (isSameUser && String(_id) !== String(isSameUser._id))
 			throw new NotFoundException("Email busy");
@@ -37,7 +38,7 @@ export class UserService {
 	}
 
 	async getCount() {
-		return this.UserModel.find().count().exec();
+		return this.userModel.find().count().exec();
 	}
 
 	async getAll(searchTerm?: string) {
@@ -51,7 +52,7 @@ export class UserService {
 					},
 				],
 			};
-		return this.UserModel.find(options)
+		return this.userModel.find(options)
 			.select("-password -updatedAt -__v")
 			.sort({
 				createdAt: "desc",
@@ -60,6 +61,28 @@ export class UserService {
 	}
 
 	async delete(id: string) {
-		return this.UserModel.findByIdAndDelete(id).exec();
+		return this.userModel.findByIdAndDelete(id).exec();
+	}
+
+	async toggleFavorite(movieId: Types.ObjectId, user: UserModel) {
+		const { _id, favorites } = user;
+
+		await this.userModel.findByIdAndUpdate(_id, {
+			favorites: favorites.includes(movieId)
+				? favorites.filter((id) => String(id) !== String(movieId))
+				: [...favorites, movieId],
+		});
+	}
+
+	async getFavoriteMovies(_id: string) {
+		return this.userModel.findById(_id, "favorites")
+			.populate({
+				path: "favorites",
+				populate: {
+					path: "genres",
+				},
+			})
+			.exec()
+			.then((data) => data.favorites);
 	}
 }

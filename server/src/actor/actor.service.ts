@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "nestjs-typegoose";
 import { ActorModel } from "./actor.model";
 import { ModelType } from "@typegoose/typegoose/lib/types";
-import { ActorDto } from "./actor.dto";
+import { ActorDto } from "./dto/actor.dto";
 
 @Injectable()
 export class ActorService {
@@ -41,11 +41,11 @@ export class ActorService {
 				as: "movies",
 			})
 			.addFields({
-				countMovies: { $size: '$movies' },
+				countMovies: { $size: "$movies" },
 			})
 			.project({ __v: 0, updatedAt: 0, movies: 0 })
 			.sort({ createdAt: -1 })
-			.exec()
+			.exec();
 	}
 
 	// admin
