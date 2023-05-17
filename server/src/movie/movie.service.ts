@@ -60,6 +60,20 @@ export class MovieService {
 			.exec();
 	}
 
+	async updateRating(id: Types.ObjectId, newRating: number) {
+		return this.movieModel
+			.findByIdAndUpdate(
+				id,
+				{
+					rating: newRating,
+				},
+				{
+					new: true,
+				}
+			)
+			.exec();
+	}
+
 	// admin
 	async byId(id: string): Promise<DocumentType<MovieModel>> {
 		return this.movieModel.findById(id).exec();

@@ -10,6 +10,7 @@ import { GenreModule } from './genre/genre.module';
 import { FileModule } from './file/file.module';
 import { ActorModule } from './actor/actor.module';
 import { MovieModule } from './movie/movie.module';
+import { RatingModule } from './rating/rating.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { MovieModule } from './movie/movie.module';
     FileModule,
     ActorModule,
     MovieModule,
+    RatingModule,
   ],
   controllers: [AppController],
   providers: [AppService],
