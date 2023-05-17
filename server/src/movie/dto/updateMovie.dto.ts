@@ -21,14 +21,8 @@ export class UpdateMovieDto {
 	@IsString()
 	title: string;
 
-	@IsString()
-	slug: string;
-
 	@IsObject()
-	parametrs?: Parameters;
-
-	@IsString()
-	videoUrl: string;
+	parameters?: Parameters;
 
 	@IsArray()
 	@IsString({ each: true })
@@ -38,5 +32,9 @@ export class UpdateMovieDto {
 	@IsString({ each: true })
 	actors: string[];
 
-	isSendTelegram?: boolean;
+	@IsString()
+	videoUrl: string;
+
+	@IsString()
+	slug: string;
 }

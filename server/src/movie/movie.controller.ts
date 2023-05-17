@@ -4,6 +4,7 @@ import {
 	Delete,
 	Get,
 	HttpCode,
+	NotFoundException,
 	Param,
 	Post,
 	Put,
@@ -13,10 +14,9 @@ import {
 } from "@nestjs/common";
 import { MovieService } from "./movie.service";
 import { Auth } from "src/auth/decorators/auth.decorator";
-import { IdValodationPipe } from "src/pipes/idValidation.pipe";
+import { IdValidationPipe } from "src/pipes/idValidation.pipe";
 import { UpdateMovieDto } from "./dto/updateMovie.dto";
 import { Types } from "mongoose";
-import { GenreIdsGto } from "./dto/genreIds.dto";
 
 @Controller("movies")
 export class MovieController {
@@ -28,13 +28,16 @@ export class MovieController {
 	}
 
 	@Get("by-actor/:actorId")
-	async byActorId(@Param("actorId", IdValodationPipe) actorId: Types.ObjectId) {
+	async byActorId(@Param("actorId", IdValidationPipe) actorId: Types.ObjectId) {
 		return this.movieService.byActor(actorId);
 	}
 
 	@Post("by-genres")
 	@HttpCode(200)
-	async byGenresId(@Body("genreIds") genreIds: GenreIdsGto) {
+	async byGenres(
+		@Body("genreIds")
+		genreIds: Types.ObjectId[]
+	) {
 		return this.movieService.byGenres(genreIds);
 	}
 
@@ -56,7 +59,7 @@ export class MovieController {
 
 	@Get(":id")
 	@Auth("admin")
-	async get(@Param("id", IdValodationPipe) id: string) {
+	async get(@Param("id", IdValidationPipe) id: string) {
 		return this.movieService.byId(id);
 	}
 
@@ -73,16 +76,18 @@ export class MovieController {
 	@HttpCode(200)
 	@Auth("admin")
 	async update(
-		@Param("id", IdValodationPipe) id: string,
+		@Param("id", IdValidationPipe) id: string,
 		@Body() dto: UpdateMovieDto
 	) {
-		return this.movieService.update(id, dto);
+		const updateMovie = await this.movieService.update(id, dto);
+		if (!updateMovie) throw new NotFoundException("Movie not found");
+		return updateMovie;
 	}
 
 	@Delete(":id")
-	@HttpCode(200)
 	@Auth("admin")
-	async delete(@Param("id", IdValodationPipe) id: string) {
-		return this.movieService.delete(id);
+	async delete(@Param("id", IdValidationPipe) id: string) {
+		const deletedDoc = await this.movieService.delete(id);
+		if (!deletedDoc) throw new NotFoundException("Movie not found");
 	}
 }

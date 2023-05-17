@@ -12,7 +12,7 @@ import {
 	ValidationPipe,
 } from "@nestjs/common";
 import { Auth } from "src/auth/decorators/auth.decorator";
-import { IdValodationPipe } from "src/pipes/idValidation.pipe";
+import { IdValidationPipe } from "src/pipes/idValidation.pipe";
 import { ActorDto } from "./actor.dto";
 import { ActorService } from "./actor.service";
 
@@ -32,7 +32,7 @@ export class ActorController {
 
 	@Get(":id")
 	@Auth("admin")
-	async get(@Param("id", IdValodationPipe) id: string) {
+	async get(@Param("id", IdValidationPipe) id: string) {
 		return this.actorService.byId(id);
 	}
 
@@ -49,7 +49,7 @@ export class ActorController {
 	@HttpCode(200)
 	@Auth("admin")
 	async update(
-		@Param("id", IdValodationPipe) id: string,
+		@Param("id", IdValidationPipe) id: string,
 		@Body() dto: ActorDto
 	) {
 		return this.actorService.update(id, dto);
@@ -58,7 +58,7 @@ export class ActorController {
 	@Delete(":id")
 	@HttpCode(200)
 	@Auth("admin")
-	async delete(@Param("id", IdValodationPipe) id: string) {
+	async delete(@Param("id", IdValidationPipe) id: string) {
 		return this.actorService.delete(id);
 	}
 }

@@ -14,7 +14,7 @@ import { UserService } from "./user.service";
 import { Auth } from "src/auth/decorators/auth.decorator";
 import { User } from "./decorators/user.decorator";
 import { UpadateUserDto } from "./dto/updateUser.dto";
-import { IdValodationPipe } from "src/pipes/idValidation.pipe";
+import { IdValidationPipe } from "src/pipes/idValidation.pipe";
 
 @Controller("users")
 export class UserController {
@@ -48,7 +48,7 @@ export class UserController {
 
 	@Get(":id")
 	@Auth("admin")
-	async getUser(@Param("id", IdValodationPipe) id: string) {
+	async getUser(@Param("id", IdValidationPipe) id: string) {
 		return this.userService.byId(id);
 	}
 
@@ -57,7 +57,7 @@ export class UserController {
 	@HttpCode(200)
 	@Auth("admin")
 	async updateUser(
-		@Param("id", IdValodationPipe) id: string,
+		@Param("id", IdValidationPipe) id: string,
 		@Body() dto: UpadateUserDto
 	) {
 		return this.userService.updateProfile(id, dto);
@@ -66,7 +66,7 @@ export class UserController {
 	@Delete(":id")
 	@HttpCode(200)
 	@Auth("admin")
-	async deleteUser(@Param("id", IdValodationPipe) id: string) {
+	async deleteUser(@Param("id", IdValidationPipe) id: string) {
 		return this.userService.delete(id);
 	}
 }
