@@ -4,11 +4,13 @@ import { InjectModel } from "nestjs-typegoose";
 import { ModelType, DocumentType } from "@typegoose/typegoose/lib/types";
 import { UpdateMovieDto } from "./dto/updateMovie.dto";
 import { Types } from "mongoose";
+import { TelegramService } from "src/telegram/telegram.service";
 
 @Injectable()
 export class MovieService {
 	constructor(
-		@InjectModel(MovieModel) private readonly movieModel: ModelType<MovieModel>
+		@InjectModel(MovieModel) private readonly movieModel: ModelType<MovieModel>,
+		private readonly telegramService: TelegramService
 	) {}
 
 	async getAll(searchTerm?: string): Promise<DocumentType<MovieModel>[]> {
@@ -46,31 +48,9 @@ export class MovieService {
 		return this.movieModel.find({ genres: { $in: genreIds } }).exec();
 	}
 
-	async getMostPopular(): Promise<DocumentType<MovieModel>[]> {
-		return this.movieModel
-			.find({ countOpened: { $gt: 0 } })
-			.sort({ countOpened: -1 })
-			.populate("genres")
-			.exec();
-	}
-
 	async updateCountOpened(slug: string) {
 		return this.movieModel
 			.findOneAndUpdate({ slug }, { $inc: { countOpened: 1 } })
-			.exec();
-	}
-
-	async updateRating(id: Types.ObjectId, newRating: number) {
-		return this.movieModel
-			.findByIdAndUpdate(
-				id,
-				{
-					rating: newRating,
-				},
-				{
-					new: true,
-				}
-			)
 			.exec();
 	}
 
@@ -93,15 +73,19 @@ export class MovieService {
 		return movie._id;
 	}
 
-	async update(_id: string, dto: UpdateMovieDto) {
-		const updateDoc = await this.movieModel
+	async update(
+		_id: string,
+		dto: UpdateMovieDto
+	): Promise<DocumentType<MovieModel> | null> {
+		if (!dto.isSendTelegram) {
+			await this.sendNotifications(dto);
+			dto.isSendTelegram = true;
+		}
+		return this.movieModel
 			.findByIdAndUpdate(_id, dto, {
 				new: true,
 			})
 			.exec();
-		if (!updateDoc) throw new NotFoundException("Movie not found");
-
-		return updateDoc;
 	}
 
 	async delete(id: string) {
@@ -109,5 +93,47 @@ export class MovieService {
 		if (!deleteDoc) throw new NotFoundException("Movie not found");
 
 		return deleteDoc;
+	}
+
+	async getMostPopular(): Promise<DocumentType<MovieModel>[]> {
+		return this.movieModel
+			.find({ countOpened: { $gt: 0 } })
+			.sort({ countOpened: -1 })
+			.populate("genres")
+			.exec();
+	}
+
+	async updateRating(id: Types.ObjectId, newRating: number) {
+		return this.movieModel
+			.findByIdAndUpdate(
+				id,
+				{
+					rating: newRating,
+				},
+				{
+					new: true,
+				}
+			)
+			.exec();
+	}
+
+	async sendNotifications(dto: UpdateMovieDto) {
+		if (process.env.NODE_ENV !== "development")
+			await this.telegramService.sendPhoto(dto.poster);
+
+		const msg = `<b>${dto.title}</b>\n\n` + `${dto.description}\n\n`;
+
+		await this.telegramService.sendMessage(msg, {
+			reply_markup: {
+				inline_keyboard: [
+					[
+						{
+							url: "https://okko.tv/movie/free-guy",
+							text: "🍿 Go to watch",
+						},
+					],
+				],
+			},
+		});
 	}
 }
