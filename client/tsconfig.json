@@ -20,15 +20,15 @@
 			"@/ui/*": ["components/ui/*"],
 			"@/screens/*": ["components/screens/*"],
 
-			"@/hooks/*": ["hooks/*"],
 			"@/shared/*": ["shared/*"],
-			"@/config/*": ["config/*"],
+			"@/hooks/*": ["hooks/*"],
 			"@/services/*": ["services/*"],
 			"@/utils/*": ["utils/*"],
-			"@/store/*": ["store/*"],
-			"@/assets/*": ["assets/*"]
+			"@/assets/*": ["assets/*"],
+			"@/configs/*": ["configs/*"],
+			"@/store/*": ["store/*"]
 		}
 	},
-	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
 	"exclude": ["node_modules"]
 }
