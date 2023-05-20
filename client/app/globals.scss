@@ -4,6 +4,8 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap");
 
+@import "react-redux-toastr/src/styles/index";
+
 html,
 body {
 	padding: 0;
@@ -28,9 +30,32 @@ a {
 
 input[type="file"],
 input[type="file"]::-webkit-file-upload-button {
-	@apply cursor-pointer focus: outline-none;
+	@apply cursor-pointer focus:outline-none;
 }
 
 input:focus {
 	box-shadow: none !important;
+}
+
+.admin-form {
+	@apply w-1/2 mt-12;
+}
+
+/* Slide animation */
+.slide-animation-enter {
+	opacity: 0;
+	transform: scale(0.9);
+}
+.slide-animation-enter-active {
+	opacity: 1;
+	transform: translateX(0);
+	transition: opacity 300ms, transform 300ms;
+}
+.slide-animation-exit {
+	opacity: 1;
+}
+.slide-animation-exit-active {
+	opacity: 0;
+	transform: scale(0.9);
+	transition: opacity 300ms, transform 300ms;
 }
