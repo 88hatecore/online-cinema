@@ -11,7 +11,7 @@ const Layout: FC = ({ children }) => {
 			<div className={styles.center}>{children}</div>
 			<Sidebar />
 		</div>
-	);
-};
+	)
+}
 
 export default Layout;
