@@ -1,9 +1,14 @@
 import { FC } from "react";
 
-import "./Sidebar.module.scss";
+import Search from "./Search/Search";
+import styles from "./Sidebar.module.scss";
 
 const Sidebar: FC = () => {
-	return <h1>Sidebar</h1>;
+	return (
+		<div className={styles.sidebar}>
+			<Search />
+		</div>
+	);
 };
 
 export default Sidebar;
