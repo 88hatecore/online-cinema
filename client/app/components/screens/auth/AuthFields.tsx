@@ -27,7 +27,7 @@ const AuthFields: FC<IAuthFields> = ({
 					},
 				})}
 				placeholder="E-mail"
-				error={errors.message}
+				error={errors.email}
 			/>
 			<Field
 				{...register(
@@ -44,7 +44,7 @@ const AuthFields: FC<IAuthFields> = ({
 				)}
 				placeholder="Password"
 				type="password"
-				error={errors.message}
+				error={errors.password}
 			/>
 		</>
 	);
