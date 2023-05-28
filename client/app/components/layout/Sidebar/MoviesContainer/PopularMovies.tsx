@@ -18,7 +18,6 @@ const PopularMovies: FC = () => {
 
 	return isLoading ? (
 		<div className="mt-11">
-			pga
 			<SkeletonLoader count={3} className="h-28 mb-4" />
 		</div>
 	) : (

@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { toastr } from "react-redux-toastr";
 
 import Heading from "@/components/ui/heading/Heading";
 
