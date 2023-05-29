@@ -10,7 +10,7 @@ export interface ITokens {
 	refreshToken: string;
 }
 
-export interface IInitialState {
+export interface IUserInitialState {
 	user: IUserState | null;
 	isLoading: boolean;
 }
@@ -20,8 +20,8 @@ export interface IEmailPassword {
 	password: string;
 }
 
-export interface IAuthResponce extends ITokens {
+export interface IAuthResponse extends ITokens {
 	user: IUser & {
-		isAdmon: boolean;
+		isAdmin: boolean;
 	};
 }
