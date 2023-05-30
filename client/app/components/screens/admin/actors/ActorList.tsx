@@ -22,7 +22,7 @@ const ActorList: FC = () => {
 			<AdminTable
 				isLoading={isLoading}
 				removeHandler={deleteAsync}
-				headerItems={["Email", "Date register"]}
+				headerItems={["Name", "Count movies"]}
 				tableItems={data || []}
 			/>
 		</Meta>

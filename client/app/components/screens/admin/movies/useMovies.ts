@@ -9,7 +9,7 @@ import { useDebounce } from "@/hooks/useDebounce";
 
 import { MovieService } from "@/services/movie.service";
 
-import { converMongoDate } from "@/utils/date/convertMongoDate";
+import { getGenresList } from "@/utils/movie/getGenresList";
 import { toastError } from "@/utils/toast-error";
 
 export const useMovies = () => {
@@ -25,7 +25,11 @@ export const useMovies = () => {
 					(movie): ITableItem => ({
 						_id: movie._id,
 						editUrl: getAdminUrl(`movie/edit/${movie._id}`),
-						items: [movie.email, converMongoDate(movie.createdAt)],
+						items: [
+							movie.title,
+							getGenresList(movie.genres),
+							String(movie.rating),
+						],
 					})
 				),
 

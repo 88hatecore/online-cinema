@@ -9,7 +9,6 @@ import { useDebounce } from "@/hooks/useDebounce";
 
 import { GenreService } from "@/services/genre.service";
 
-import { converMongoDate } from "@/utils/date/convertMongoDate";
 import { toastError } from "@/utils/toast-error";
 
 export const useGenres = () => {
@@ -25,7 +24,7 @@ export const useGenres = () => {
 					(genre): ITableItem => ({
 						_id: genre._id,
 						editUrl: getAdminUrl(`genre/edit/${genre._id}`),
-						items: [genre.email, converMongoDate(genre.createdAt)],
+						items: [genre.name, genre.slug],
 					})
 				),
 

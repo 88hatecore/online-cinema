@@ -22,7 +22,7 @@ const GenreList: FC = () => {
 			<AdminTable
 				isLoading={isLoading}
 				removeHandler={deleteAsync}
-				headerItems={["Email", "Date register"]}
+				headerItems={["Name", "Slug"]}
 				tableItems={data || []}
 			/>
 		</Meta>

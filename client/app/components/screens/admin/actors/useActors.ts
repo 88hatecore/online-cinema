@@ -25,7 +25,7 @@ export const useActors = () => {
 					(actor): ITableItem => ({
 						_id: actor._id,
 						editUrl: getAdminUrl(`actor/edit/${actor._id}`),
-						items: [actor.email, converMongoDate(actor.createdAt)],
+						items: [actor.name, String(actor.countMovies)],
 					})
 				),
 
