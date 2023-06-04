@@ -15,8 +15,8 @@ import formStyles from "@/ui/form-elements/admin-form.module.scss";
 import Meta from "@/utils/meta/Meta";
 import { generateSlug } from "@/utils/string/generateSlug";
 
-import { IGenreEditInput } from "./genre-edit.interface";
-import { useGenreEdit } from "./useGenreEdit";
+import { IMovieEditInput } from "./movie-edit.interface";
+import { useMovieEdit } from "./useMovieEdit";
 
 const DynamicTextEditor = dynamic(
 	() => import("@/components/ui/form-elements/TextEditor"),
@@ -25,7 +25,7 @@ const DynamicTextEditor = dynamic(
 	}
 );
 
-const GenreEdit: FC = () => {
+const MovieEdit: FC = () => {
 	const {
 		handleSubmit,
 		register,
@@ -33,15 +33,15 @@ const GenreEdit: FC = () => {
 		setValue,
 		getValues,
 		control,
-	} = useForm<IGenreEditInput>({
+	} = useForm<IMovieEditInput>({
 		mode: "onChange",
 	});
 
-	const { isLoading, onSubmit } = useGenreEdit(setValue);
+	const { isLoading, onSubmit } = useMovieEdit(setValue);
 	return (
-		<Meta title="Edit genre">
+		<Meta title="Edit movie">
 			<AdminNavigation />
-			<Heading title="Edit genre" />
+			<Heading title="Edit movie" />
 			<form onSubmit={handleSubmit(onSubmit)} className={formStyles.form}>
 				{isLoading ? (
 					<SkeletonLoader count={3} />
@@ -107,4 +107,4 @@ const GenreEdit: FC = () => {
 	);
 };
 
-export default GenreEdit;
+export default MovieEdit;
