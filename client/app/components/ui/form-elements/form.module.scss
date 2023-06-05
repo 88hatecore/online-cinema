@@ -47,3 +47,43 @@
 		}
 	}
 }
+
+.uploadField {
+	@apply relative;
+	.uploadFlex {
+		@apply flex;
+
+		> .uploadImageContainer {
+			@apply shrink-0 relative w-24 h-24;
+
+			img {
+				@apply image-like-bg rounded-md;
+			}
+
+			> span {
+				@apply animate-fade;
+			}
+		}
+
+		> label {
+			@apply block mr-6;
+
+			.error {
+				@apply relative -bottom-3;
+			}
+
+			> span {
+				@apply text-xs uppercase text-gray-600 block mb-4;
+			}
+
+			> input {
+				@apply block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold
+				file:bg-primary opacity-70 file:text-white transition-opacity;
+			}
+
+			&:hover > input {
+				@apply opacity-100;
+			}
+		}
+	}
+}
