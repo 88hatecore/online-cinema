@@ -1,12 +1,10 @@
-import { IsEmail, MinLength, IsString } from "class-validator";
+import { IsString, MinLength } from "class-validator";
 
 export class AuthDto {
-  @IsEmail()
-  email: string;
+	@IsString()
+	email: string;
 
-  @MinLength(6, {
-    message: "Password cannot be less than 8 charecters",
-  })
-  @IsString()
-  password: string;
+	@MinLength(8, { message: "Password cannot be less than 8 characters" })
+	@IsString()
+	password: string;
 }

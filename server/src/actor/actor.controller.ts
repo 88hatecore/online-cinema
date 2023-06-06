@@ -12,10 +12,10 @@ import {
 	UsePipes,
 	ValidationPipe,
 } from "@nestjs/common";
-import { Auth } from "src/auth/decorators/auth.decorator";
-import { IdValidationPipe } from "src/pipes/idValidation.pipe";
-import { ActorDto } from "./dto/actor.dto";
+import { Auth } from "src/auth/decorators/Auth.decorator";
+import { IdValidationPipe } from "src/pipes/id.validation.pipe";
 import { ActorService } from "./actor.service";
+import { CreateActorDto } from "./dto/create-actor.dto";
 
 @Controller("actors")
 export class ActorController {
@@ -51,7 +51,7 @@ export class ActorController {
 	@Auth("admin")
 	async update(
 		@Param("id", IdValidationPipe) id: string,
-		@Body() dto: ActorDto
+		@Body() dto: CreateActorDto
 	) {
 		const updateActor = await this.actorService.update(id, dto);
 		if (!updateActor) throw new NotFoundException("Actor not found");
