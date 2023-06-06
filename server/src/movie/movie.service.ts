@@ -1,11 +1,10 @@
-import { Injectable } from "@nestjs/common";
-import { ModelType, DocumentType } from "@typegoose/typegoose/lib/types";
-import { Types } from "mongoose";
-import { InjectModel } from "nestjs-typegoose";
-import { TelegramService } from "src/telegram/telegram.service";
-
-import { CreateMovieDto } from "./dto/create-movie.dto";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { MovieModel } from "./movie.model";
+import { InjectModel } from "nestjs-typegoose";
+import { ModelType, DocumentType } from "@typegoose/typegoose/lib/types";
+import { UpdateMovieDto } from "./dto/updateMovie.dto";
+import { Types } from "mongoose";
+import { TelegramService } from "src/telegram/telegram.service";
 
 @Injectable()
 export class MovieService {
@@ -55,14 +54,13 @@ export class MovieService {
 			.exec();
 	}
 
-	/* Admin area */
-
+	// admin
 	async byId(id: string): Promise<DocumentType<MovieModel>> {
 		return this.movieModel.findById(id).exec();
 	}
 
 	async create(): Promise<Types.ObjectId> {
-		const defaultValue: CreateMovieDto = {
+		const defaultValue: UpdateMovieDto = {
 			bigPoster: "",
 			actors: [],
 			genres: [],
@@ -77,19 +75,25 @@ export class MovieService {
 	}
 
 	async update(
-		id: string,
-		dto: CreateMovieDto
+		_id: string,
+		dto: UpdateMovieDto
 	): Promise<DocumentType<MovieModel> | null> {
 		if (!dto.isSendTelegram) {
 			await this.sendNotifications(dto);
 			dto.isSendTelegram = true;
 		}
-
-		return this.movieModel.findByIdAndUpdate(id, dto, { new: true }).exec();
+		return this.movieModel
+			.findByIdAndUpdate(_id, dto, {
+				new: true,
+			})
+			.exec();
 	}
 
-	async delete(id: string): Promise<DocumentType<MovieModel> | null> {
-		return this.movieModel.findByIdAndDelete(id).exec();
+	async delete(id: string) {
+		const deleteDoc = await this.movieModel.findByIdAndDelete(id).exec();
+		if (!deleteDoc) throw new NotFoundException("Movie not found");
+
+		return deleteDoc;
 	}
 
 	async getMostPopular(): Promise<DocumentType<MovieModel>[]> {
@@ -100,14 +104,21 @@ export class MovieService {
 			.exec();
 	}
 
-	async updateRating(id: string, newRating: number) {
+	async updateRating(id: Types.ObjectId, newRating: number) {
 		return this.movieModel
-			.findByIdAndUpdate(id, { rating: newRating }, { new: true })
+			.findByIdAndUpdate(
+				id,
+				{
+					rating: newRating,
+				},
+				{
+					new: true,
+				}
+			)
 			.exec();
 	}
 
-	/* Utilites */
-	async sendNotifications(dto: CreateMovieDto) {
+	async sendNotifications(dto: UpdateMovieDto) {
 		if (process.env.NODE_ENV !== "development")
 			await this.telegramService.sendPhoto(dto.poster);
 

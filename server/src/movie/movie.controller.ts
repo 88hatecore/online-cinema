@@ -12,10 +12,10 @@ import {
 	UsePipes,
 	ValidationPipe,
 } from "@nestjs/common";
-import { IdValidationPipe } from "../pipes/id.validation.pipe";
-import { CreateMovieDto } from "./dto/create-movie.dto";
 import { MovieService } from "./movie.service";
-import { Auth } from "src/auth/decorators/Auth.decorator";
+import { Auth } from "src/auth/decorators/auth.decorator";
+import { IdValidationPipe } from "src/pipes/idValidation.pipe";
+import { UpdateMovieDto } from "./dto/updateMovie.dto";
 import { Types } from "mongoose";
 
 @Controller("movies")
@@ -28,7 +28,7 @@ export class MovieController {
 	}
 
 	@Get("by-actor/:actorId")
-	async byActor(@Param("actorId", IdValidationPipe) actorId: Types.ObjectId) {
+	async byActorId(@Param("actorId", IdValidationPipe) actorId: Types.ObjectId) {
 		return this.movieService.byActor(actorId);
 	}
 
@@ -46,12 +46,12 @@ export class MovieController {
 		return this.movieService.getAll(searchTerm);
 	}
 
-	@Get("/most-popular")
+	@Get("most-popular")
 	async getMostPopular() {
 		return this.movieService.getMostPopular();
 	}
 
-	@Post("/update-count-opened")
+	@Put("update-count-opened")
 	@HttpCode(200)
 	async updateCountOpened(@Body("slug") slug: string) {
 		return this.movieService.updateCountOpened(slug);
@@ -63,6 +63,7 @@ export class MovieController {
 		return this.movieService.byId(id);
 	}
 
+	@UsePipes(new ValidationPipe())
 	@Post()
 	@HttpCode(200)
 	@Auth("admin")
@@ -76,7 +77,7 @@ export class MovieController {
 	@Auth("admin")
 	async update(
 		@Param("id", IdValidationPipe) id: string,
-		@Body() dto: CreateMovieDto
+		@Body() dto: UpdateMovieDto
 	) {
 		const updateMovie = await this.movieService.update(id, dto);
 		if (!updateMovie) throw new NotFoundException("Movie not found");

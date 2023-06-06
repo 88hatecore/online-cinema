@@ -11,10 +11,10 @@ import {
 
 import { Types } from "mongoose";
 import { Auth } from "src/auth/decorators/Auth.decorator";
-import { IdValidationPipe } from "src/pipes/id.validation.pipe";
 import { User } from "src/user/decorators/user.decorator";
-import { SetRatingDto } from "./dto/set-rating.dto";
+import { SetRatingDto } from "./dto/setRating.dto";
 import { RatingService } from "./rating.service";
+import { IdValidationPipe } from "src/pipes/idValidation.pipe";
 
 @Controller("ratings")
 export class RatingController {

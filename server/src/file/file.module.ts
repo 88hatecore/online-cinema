@@ -1,9 +1,8 @@
 import { Module } from "@nestjs/common";
+import { FileService } from "./file.service";
+import { FileController } from "./file.controller";
 import { ServeStaticModule } from "@nestjs/serve-static";
 import { path } from "app-root-path";
-
-import { FilesController } from "./files.controller";
-import { FilesService } from "./files.service";
 
 @Module({
 	imports: [
@@ -12,7 +11,7 @@ import { FilesService } from "./files.service";
 			serveRoot: "/uploads",
 		}),
 	],
-	providers: [FilesService],
-	controllers: [FilesController],
+	providers: [FileService],
+	controllers: [FileController],
 })
-export class FilesModule {}
+export class FileModule {}

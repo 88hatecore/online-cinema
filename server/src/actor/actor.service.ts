@@ -1,21 +1,25 @@
-import { Injectable } from "@nestjs/common";
-import { ModelType, DocumentType } from "@typegoose/typegoose/lib/types";
-import { Types } from "mongoose";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "nestjs-typegoose";
 import { ActorModel } from "./actor.model";
-import { CreateActorDto } from "./dto/create-actor.dto";
+import { ModelType } from "@typegoose/typegoose/lib/types";
+import { ActorDto } from "./dto/actor.dto";
 
 @Injectable()
 export class ActorService {
 	constructor(
-		@InjectModel(ActorModel)
-		private readonly actorModel: ModelType<ActorModel>
+		@InjectModel(ActorModel) private readonly actorModel: ModelType<ActorModel>
 	) {}
 
-	async getAll(searchTerm?: string): Promise<DocumentType<ActorModel>[]> {
+	async bySlug(slug: string) {
+		const doc = await this.actorModel.findOne({ slug }).exec();
+		if (!doc) throw new NotFoundException("Actor not found");
+		return doc;
+	}
+
+	async getAll(searchTerm?: string) {
 		let options = {};
 
-		if (searchTerm) {
+		if (searchTerm)
 			options = {
 				$or: [
 					{
@@ -26,7 +30,6 @@ export class ActorService {
 					},
 				],
 			};
-		}
 
 		return this.actorModel
 			.aggregate()
@@ -45,34 +48,43 @@ export class ActorService {
 			.exec();
 	}
 
-	async bySlug(slug: string): Promise<DocumentType<ActorModel>> {
-		return this.actorModel.findOne({ slug }).exec();
+	// admin
+	async byId(_id: string) {
+		const actor = await this.actorModel.findById(_id);
+		if (!actor) throw new NotFoundException("Actor not found!");
+
+		return actor;
 	}
 
-	/* Admin area */
-
-	async byId(id: string): Promise<DocumentType<ActorModel>> {
-		return this.actorModel.findById(id).exec();
+	async getCount() {
+		return this.actorModel.find().count().exec();
 	}
 
-	async create(): Promise<Types.ObjectId> {
-		const defaultValue: CreateActorDto = {
+	async create() {
+		const defaultValue: ActorDto = {
 			name: "",
-			photo: "",
 			slug: "",
+			photo: "",
 		};
 		const actor = await this.actorModel.create(defaultValue);
 		return actor._id;
 	}
 
-	async update(
-		id: string,
-		dto: CreateActorDto
-	): Promise<DocumentType<ActorModel> | null> {
-		return this.actorModel.findByIdAndUpdate(id, dto, { new: true }).exec();
+	async update(_id: string, dto: ActorDto) {
+		const updateDoc = await this.actorModel
+			.findByIdAndUpdate(_id, dto, {
+				new: true,
+			})
+			.exec();
+		if (!updateDoc) throw new NotFoundException("Actor not found");
+
+		return updateDoc;
 	}
 
-	async delete(id: string): Promise<DocumentType<ActorModel> | null> {
-		return this.actorModel.findByIdAndDelete(id).exec();
+	async delete(id: string) {
+		const deleteDoc = await this.actorModel.findByIdAndDelete(id).exec();
+		if (!deleteDoc) throw new NotFoundException("Actor not found");
+
+		return deleteDoc;
 	}
 }
