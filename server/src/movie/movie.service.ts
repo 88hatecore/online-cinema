@@ -64,7 +64,6 @@ export class MovieService {
 			bigPoster: "",
 			actors: [],
 			genres: [],
-			description: "",
 			poster: "",
 			title: "",
 			videoUrl: "",

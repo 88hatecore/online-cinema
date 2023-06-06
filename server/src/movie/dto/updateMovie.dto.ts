@@ -1,10 +1,4 @@
-import {
-	IsArray,
-	IsBoolean,
-	IsNumber,
-	IsObject,
-	IsString,
-} from "class-validator";
+import { IsArray, IsBoolean, IsNumber, IsObject, IsString } from "class-validator";
 
 export class Parameters {
 	@IsNumber()
@@ -28,7 +22,7 @@ export class UpdateMovieDto {
 	title: string;
 
 	@IsString()
-	description: string;
+	description?: string;
 
 	@IsObject()
 	parameters?: Parameters;
@@ -48,5 +42,5 @@ export class UpdateMovieDto {
 	slug: string;
 
 	@IsBoolean()
-	isSendTelegram?: boolean;
+	isSendTelegram?: boolean
 }
