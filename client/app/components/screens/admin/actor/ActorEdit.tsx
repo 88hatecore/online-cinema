@@ -1,4 +1,3 @@
-import dynamic from "next/dynamic";
 import { FC } from "react";
 import { Controller, useForm } from "react-hook-form";
 
@@ -7,7 +6,7 @@ import AdminNavigation from "@/components/ui/admin-navigation/AdminNavigation";
 import Button from "@/components/ui/form-elements/Button";
 import Field from "@/components/ui/form-elements/Field";
 import SlugField from "@/components/ui/form-elements/SlugField/SlugField";
-import UploadField from "@/components/ui/form-elements/UploadField/uploadField";
+
 import Heading from "@/components/ui/heading/Heading";
 
 import formStyles from "@/ui/form-elements/admin-form.module.scss";
@@ -17,13 +16,7 @@ import { generateSlug } from "@/utils/string/generateSlug";
 
 import { IActorEditInput } from "./actor-edit.interface";
 import { useActorEdit } from "./useActorEdit";
-
-const DynamicTextEditor = dynamic(
-	() => import("@/components/ui/form-elements/TextEditor"),
-	{
-		ssr: false,
-	}
-);
+import UploadField from "@/components/ui/form-elements/UploadField/UploadField";
 
 const ActorEdit: FC = () => {
 	const {

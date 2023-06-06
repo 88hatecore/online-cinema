@@ -79,10 +79,10 @@ export class GenreService {
 
 	async create() {
 		const defaultValue: CreateGenreDto = {
-			name: "",
-			slug: "",
 			description: "",
 			icon: "",
+			name: "",
+			slug: "",
 		};
 		const genre = await this.GenreModel.create(defaultValue);
 		return genre._id;
