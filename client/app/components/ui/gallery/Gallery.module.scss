@@ -1,0 +1,52 @@
+@import "../../../assets/styles/variables";
+
+.gallery {
+	@apply flex items-center overflow-x-auto flex-nowrap py-3;
+	-webkit-overflow-scrolling: touch;
+
+	&::-webkit-scrollbar {
+		display: none;
+	}
+}
+
+.item {
+	@apply relative transition-transform flex items-end shadow-lg rounded-layout overflow-hidden;
+	flex: 0 0 auto;
+
+	&:hover {
+		transform: translateY(-5px);
+	}
+
+	&.vertical {
+		@apply mr-4 last:mr-0 w-1/5 h-72;
+		max-width: 200px;
+	}
+
+	&.horizontal {
+		@apply mb-8 h-44;
+		width: 31%;
+	}
+
+	&.withText {
+		@include fade-bg-gradient(0deg);
+		&::before {
+			@apply rounded-layout;
+		}
+	}
+
+	img {
+		@apply image-like-bg;
+	}
+
+	.content {
+		@apply relative z-2 text-center m-3 w-full;
+
+		.title {
+			@apply font-semibold mb-1 text-white text-shadow;
+		}
+
+		.subTitle {
+			@apply text-gray-500 text-shadow;
+		}
+	}
+}
