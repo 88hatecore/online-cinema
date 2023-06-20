@@ -4,13 +4,11 @@ import { InjectModel } from "nestjs-typegoose";
 import { ModelType, DocumentType } from "@typegoose/typegoose/lib/types";
 import { UpdateMovieDto } from "./dto/updateMovie.dto";
 import { Types } from "mongoose";
-import { TelegramService } from "src/telegram/telegram.service";
 
 @Injectable()
 export class MovieService {
 	constructor(
-		@InjectModel(MovieModel) private readonly movieModel: ModelType<MovieModel>,
-		private readonly telegramService: TelegramService
+		@InjectModel(MovieModel) private readonly movieModel: ModelType<MovieModel>
 	) {}
 
 	async getAll(searchTerm?: string): Promise<DocumentType<MovieModel>[]> {
@@ -77,10 +75,6 @@ export class MovieService {
 		_id: string,
 		dto: UpdateMovieDto
 	): Promise<DocumentType<MovieModel> | null> {
-		if (!dto.isSendTelegram) {
-			await this.sendNotifications(dto);
-			dto.isSendTelegram = true;
-		}
 		return this.movieModel
 			.findByIdAndUpdate(_id, dto, {
 				new: true,
@@ -115,25 +109,5 @@ export class MovieService {
 				}
 			)
 			.exec();
-	}
-
-	async sendNotifications(dto: UpdateMovieDto) {
-		if (process.env.NODE_ENV !== "development")
-			await this.telegramService.sendPhoto(dto.poster);
-
-		const msg = `<b>${dto.title}</b>\n\n` + `${dto.description}\n\n`;
-
-		await this.telegramService.sendMessage(msg, {
-			reply_markup: {
-				inline_keyboard: [
-					[
-						{
-							url: "https://okko.tv/movie/free-guy",
-							text: "🍿 Go to watch",
-						},
-					],
-				],
-			},
-		});
 	}
 }

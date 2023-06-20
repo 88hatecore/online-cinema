@@ -4,7 +4,7 @@ import { GenreModel } from "./genre.model";
 import { ModelType } from "@typegoose/typegoose/lib/types";
 import { CreateGenreDto } from "./dto/createGenre.dto";
 import { MovieService } from "src/movie/movie.service";
-import { ICollection } from "./genre.interface";
+import { ICollection } from "./interfaces/genre.interface";
 
 @Injectable()
 export class GenreService {
