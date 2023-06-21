@@ -1,0 +1,19 @@
+.heading {
+	@apply mb-3;
+}
+
+.movies {
+	@apply flex flex-wrap mt-8;
+
+	> a {
+		@apply mr-8 animate-fade;
+	}
+
+	> a:nth-child(3n) {
+		@apply mr-0;
+	}
+}
+
+.button {
+	@apply btn-primary py-2 px-10;
+}
