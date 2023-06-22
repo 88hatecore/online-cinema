@@ -42,7 +42,11 @@ const Auth: FC = () => {
 			<section className={styles.wrapper}>
 				<form onSubmit={handleSubmit(onSubmit)}>
 					<Heading title="Auth" className="mb-6" />
-					<AuthFields register={registerInput} formState={formState} />
+					<AuthFields
+						register={registerInput}
+						formState={formState}
+						isPasswordRequired
+					/>
 
 					<div className={styles.buttons}>
 						<Button
