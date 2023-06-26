@@ -18,6 +18,10 @@ const DynamicPlayer = dynamic(
 	}
 );
 
+const DynamicRating = dynamic(() => import("./Content/RateMovie/RateMovie"), {
+	ssr: false,
+});
+
 const SingleMovie: FC<IMoviePage> = ({ movie, similarMovies }) => {
 	return (
 		<Meta title={movie.title} description={`Watch ${movie.title}`}>
@@ -33,7 +37,7 @@ const SingleMovie: FC<IMoviePage> = ({ movie, similarMovies }) => {
 				<Gallery items={similarMovies} />
 			</div>
 
-			{/* raiting */}
+			<DynamicRating slug={movie.slug} id={movie._id} />
 		</Meta>
 	);
 };

@@ -14,7 +14,7 @@ const ContentList: FC<IContentList> = ({ links, name }) => {
 						<Link href={link.link}>
 							<a>{link.title}</a>
 						</Link>
-						{index + 1 === links.length ? ", " : ""}
+						{index + 1 !== links.length ? ", " : ""}
 					</Fragment>
 				))}
 			</div>
