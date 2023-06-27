@@ -1,13 +1,20 @@
+import dynamic from "next/dynamic";
 import { FC } from "react";
 
-import FavoriteMovies from "./FavoriteMovies/FavoriteMovies";
 import PopularMovies from "./PopularMovies";
+
+const DynamicTextEditor = dynamic(
+	() => import("./FavoriteMovies/FavoriteMovies"),
+	{
+		ssr: false,
+	}
+);
 
 const MovieContainer: FC = () => {
 	return (
 		<div>
 			<PopularMovies />
-			<FavoriteMovies />
+			<DynamicTextEditor />
 		</div>
 	);
 };

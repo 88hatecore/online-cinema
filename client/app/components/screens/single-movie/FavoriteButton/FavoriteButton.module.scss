@@ -1,0 +1,18 @@
+.button {
+	@apply absolute right-0 bottom-20 pt-8 bg-no-repeat w-24 h-16 bg-left
+  mx-auto bg-transparent;
+	background-size: 2900%;
+}
+
+.animate {
+	animation: heart-burst 0.8s steps(28) forwards;
+}
+
+@keyframes heart-burst {
+	0% {
+		@apply bg-left;
+	}
+	100% {
+		@apply bg-right;
+	}
+}

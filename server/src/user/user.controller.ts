@@ -44,7 +44,7 @@ export class UserController {
 		return this.userService.getFavoriteMovies(_id);
 	}
 
-	@Post("profile/favorites")
+	@Put("profile/favorites")
 	@HttpCode(200)
 	@Auth()
 	async toggleFavorite(
