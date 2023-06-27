@@ -1,0 +1,69 @@
+@import "../../../assets/styles/variables";
+
+$shadow: 0 10px 10px 0 rgb(0 0 0 / 15%), 0 6px 6px 0 rgb(0 0 0 / 15%),
+	0 3px 3px 0 rgb(0 0 0 / 15%);
+
+.collections {
+	@apply flex flex-wrap items-center mt-10;
+
+	> a {
+		@apply mr-8 animate-fade;
+	}
+
+	> a:nth-child(3n) {
+		@apply mr-0;
+	}
+}
+
+.collection {
+	@apply relative flex items-end mb-10 h-44 transition-transform;
+	width: 31%;
+
+	@include fade-bg-gradient(0deg);
+	&::before {
+		@apply rounded-layout;
+	}
+
+	img {
+		@apply rounded-layout image-like-bg;
+		box-shadow: $shadow;
+	}
+
+	> span {
+		@apply z-1;
+	}
+
+	.behind {
+		@apply absolute overflow-hidden z-0 transition-transform;
+
+		&.second {
+			@apply opacity-60 -top-1.5 left-2.5 right-2.5 bottom-4;
+		}
+
+		&.third {
+			@apply opacity-40 -top-3 left-5 right-5 bottom-8;
+		}
+	}
+
+	&:hover {
+		@apply -translate-y-1;
+
+		.behind {
+			&.second {
+				transform: translateY(1px);
+			}
+
+			&.third {
+				transform: translateY(2px);
+			}
+		}
+	}
+
+	.content {
+		@apply relative z-2 text-center m-3 w-full;
+
+		.title {
+			@apply font-semibold mb-1 text-white text-shadow;
+		}
+	}
+}
