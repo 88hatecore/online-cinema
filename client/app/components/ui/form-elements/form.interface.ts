@@ -17,10 +17,9 @@ type TypeInputPropsField = InputHTMLAttributes<HTMLInputElement> & IFieldProps;
 
 export interface IField extends TypeInputPropsField {}
 
-type TypeEditorPropsFields = EditorProps & IFieldProps;
+type TypeEditorPropsField = EditorProps & IFieldProps;
 
-export interface ITextEditor
-	extends Omit<TypeEditorPropsFields, "editorState"> {
+export interface ITextEditor extends Omit<TypeEditorPropsField, "editorState"> {
 	onChange: (...event: any[]) => void;
 	value: string;
 }

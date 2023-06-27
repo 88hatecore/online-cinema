@@ -40,6 +40,7 @@
 		"react-star-rating-component": "^1.4.1",
 		"react-transition-group": "^4.4.2",
 		"sass": "^1.49.0",
+		"sharp": "^0.32.1",
 		"string-strip-html": "^9.1.6"
 	},
 	"devDependencies": {
