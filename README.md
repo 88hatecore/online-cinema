@@ -4,7 +4,7 @@
 
 This is a project created using the `next-react-app`. It's an app for watching movies.
 
-> **Main stack:** `next.js`, `nest.js`, `typescript`, `tailwind`
+> **Main stack:** `next.js`, `nest.js`, `typescript`
 
 > **Additional technologies:** `axios`, `tailwind`
 
